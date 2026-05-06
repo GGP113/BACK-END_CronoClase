@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.grupo5.cronoclase.repository.*;
+import com.grupo5.cronoclase.dtos.*;
 import com.grupo5.cronoclase.model.entity.*;
 
 import java.util.*;
@@ -61,7 +62,20 @@ public class ProfesorService {
 
     }
 
-    public Profesor obtenerPorId(Long id) {
+
+    public ProfesorResponseDTO obtenerPorId(Long id){
+
+        Profesor profesorEntity =  profesorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Profesor no encontrado con ID: " + id));
+  
+        ProfesorResponseDTO profesorDto = new ProfesorResponseDTO();
+        profesorDto.setNombre(profesorEntity.getNombre());
+        profesorDto.setEmail(profesorEntity.getEmail());
+        return profesorDto;
+
+    }
+
+    public Profesor obtenerPorIdNoDTO(Long id) {
         // De esta forma se busca un profesor por su ID. y se lanza un mensaje de error en 
         //caso de que no se encuentre
         return profesorRepository.findById(id)
@@ -72,7 +86,7 @@ public class ProfesorService {
     @Transactional
     public Profesor actualizarProfesor(Long id, Profesor datosNuevos) {
         // 1. Buscamos el profesor actual (si no existe, lanza el error ya programado)
-        Profesor profesorExistente = obtenerPorId(id);
+        Profesor profesorExistente = obtenerPorIdNoDTO(id);
 
         // 2. Seteamos los nuevos datos
         profesorExistente.setNombre(datosNuevos.getNombre());

@@ -3,6 +3,7 @@ package com.grupo5.cronoclase.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.grupo5.cronoclase.repository.*;
+import com.grupo5.cronoclase.dtos.*;
 import com.grupo5.cronoclase.model.entity.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,21 @@ public class EstudianteService {
         estudiante.setId(null); // Ignoramos cualquier id del body para forzar INSERT
         return estudianteRepository.save(estudiante);
     }
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Servicio para crear varios estudiantes de una sola vez
 
@@ -64,20 +80,32 @@ public class EstudianteService {
 
     }
 
-    public Estudiante obtenerPorId(Long id) {
-        // De esta forma se busca un estudiante por su ID. y se lanza un mensaje de
-        // error en
-        // caso de que no se encuentre
-        return estudianteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Profesor no encontrado con ID: " + id));
+    public EstudianteResponseDTO obtenerPorId(Long id) {
+
+        // 1. Buscamos la entidad completa en la BD
+        Estudiante estudianteEntidad = estudianteRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+        EstudianteResponseDTO estudianteDTO = new EstudianteResponseDTO();
+        estudianteDTO.setNombre(estudianteEntidad.getNombre());
+        estudianteDTO.setEmail(estudianteEntidad.getEmail());
+
+        return estudianteDTO;
+
     }
+
+
+    private Estudiante buscarEntidadPorId(Long id) {
+        return estudianteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+    }
+
 
     // --- ACTUALIZAR ESTUDIANTE ---
     @Transactional
     public Estudiante actualizarEstudiante(Long id, Estudiante datosNuevos) {
         // 1. Buscamos al estudiante actual (si no existe, lanza el error que ya
         // programaste)
-        Estudiante estudianteExistente = obtenerPorId(id);
+        Estudiante estudianteExistente = buscarEntidadPorId(id);
 
         // 2. Seteamos los nuevos datos
         estudianteExistente.setNombre(datosNuevos.getNombre());

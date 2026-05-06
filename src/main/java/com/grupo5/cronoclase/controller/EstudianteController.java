@@ -2,6 +2,7 @@ package com.grupo5.cronoclase.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grupo5.cronoclase.dtos.EstudianteResponseDTO;
 import com.grupo5.cronoclase.model.entity.*;
 import com.grupo5.cronoclase.service.*;
 
@@ -56,7 +57,7 @@ public class EstudianteController {
 
     @GetMapping("/{estudianteID}")
 
-    public Estudiante obtenerPorId(@PathVariable Long estudianteID) {
+    public EstudianteResponseDTO obtenerPorId(@PathVariable Long estudianteID) {
 
         return estudianteService.obtenerPorId(estudianteID);
 

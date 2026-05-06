@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo5.cronoclase.model.entity.*;
 import com.grupo5.cronoclase.service.*;
+import com.grupo5.cronoclase.dtos.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +52,7 @@ public class ProfesorController {
     }
 
     @GetMapping("/{profesorID}")
-    public Profesor obtenerPorId(@PathVariable Long profesorID) {
+    public ProfesorResponseDTO obtenerPorId(@PathVariable Long profesorID) {
         return profesorService.obtenerPorId(profesorID);
     }
 
